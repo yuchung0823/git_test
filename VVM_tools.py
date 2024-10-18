@@ -117,22 +117,27 @@ class VVM_tools:
         return file_type
 
     def get_all_variables_and_file_types(self):
-        """
-        Prints all variables and their corresponding file types.
-        """
         if not self.var_file_map:
             print("No variables found. Please ensure the files are properly loaded.")
             return
 
-        print("Variable Name -> File Type")
-        print("===========================")
+        # Create a mapping from file types to their variables
+        type_var_map = {}
         for var_name, file_type in self.var_file_map.items():
-            print(f"{var_name} -> {file_type}")    
+            if file_type not in type_var_map:
+                type_var_map[file_type] = []
+            type_var_map[file_type].append(var_name)
+
+        # Print the data types and their corresponding variables
+        print("Data Type -> Variables")
+        print("=========================")
+        for file_type, variables in type_var_map.items():
+            print(f"{file_type}: {', '.join(sorted(variables))}")
 
 if __name__ == "__main__":
     loader = VVM_tools("/data/chung0823/VVM_cloud_dynamics_2024/DATA/pbl_ctl/archive/")
     loader.get_all_variables_and_file_types()
     
     # Example: Get a variable data using integer time
-    data = loader.get_variable("pbl_ctl", "th", 235)  # Make sure "temperature" is a valid variable name
+    data = loader.get_variable("pbl_ctl", "th", 235) 
     print(data)
